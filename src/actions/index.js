@@ -1,0 +1,6 @@
+{
+    type: 'IncreaseCount'
+}
+{
+    type: 'DecreaseCount'
+}
