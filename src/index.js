@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {createContext} from 'react'; //context api
 import ReactDOM from 'react-dom';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
@@ -26,11 +26,14 @@ const logger = ({dispatch, getState}) => (next) => (action) => {
 // }
 
 const store = createStore(rootReducer, applyMiddleware(logger, thunk));
+export const StoreContext = createContext();
+
 console.log('store', store);
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App store={store}/>,
-  </React.StrictMode>,
+  <StoreContext.Provider value={store}>
+    <App store={store}/>
+  </StoreContext.Provider>
+  ,
   document.getElementById('root')
   );
