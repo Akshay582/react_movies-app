@@ -3,7 +3,7 @@ import {data} from '../data';
 import Navbar from './Navbar';
 import MovieCard from './MovieCard';
 import { addMovies, setShowFavorites } from '../actions';
-import { StoreContext } from '../index';
+import { StoreContext, connect } from '../index';
 
 class AppWrapper extends Component {
   render () {
@@ -20,17 +20,13 @@ class AppWrapper extends Component {
 class App extends Component {
   componentDidMount() {
     const {store} = this.props;
-    store.subscribe(() => {
-      console.log('Updated!');
-      this.forceUpdate();
-    })
     // make an api call
     // dispatch an action
     store.dispatch(addMovies(data));
     console.log('state:', store.getState());
   }
   isMovieFavorite = (movie)  => {
-    const { movies } = this.props.store.getState();
+    const { movies } = this.props.getState();
 
     const index = movies.favorites.indexOf(movie);
     if(index !== -1){
@@ -39,7 +35,7 @@ class App extends Component {
     return false;
   }
   onChangeTab = (val) => {
-    this.props.store.dispatch(setShowFavorites(val));
+    this.props.dispatch(setShowFavorites(val));
   }
   render() {
     return (
@@ -47,7 +43,7 @@ class App extends Component {
       {(store) => {
         const { movies, search } = store.getState();
         const { list, favorites, showFavorites } = movies; //{movies: [], search: []}
-        console.log('RENDER', this.props.store.getState());
+        console.log('RENDER', store.getState());
         const displayMovies = showFavorites ? favorites : list;
           return (
             <div className="App">
@@ -77,4 +73,11 @@ class App extends Component {
     );
 }}
 
-export default AppWrapper;
+const ConnectedToStoreApp = connect(function (state) {
+  return{
+    movies: state.movies,
+    search: state.search
+  }
+})(App);
+
+export default ConnectedToStoreApp;
