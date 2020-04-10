@@ -13,7 +13,6 @@ export default class MovieCard extends Component {
     render() {
         const {Poster, Title, Plot, imdbRating} = this.props.movie;
         const {isFavorite} = this.props;
-        console.log(isFavorite);
         return (
             <div className="movie-card">
                 <div className="left">
